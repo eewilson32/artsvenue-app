@@ -6,6 +6,11 @@ interface TicketsPageProps {
   onCartUpdate: (tickets: number, price: number) => void;
 }
 
+// Define an interface for the prices object with an index signature
+interface TicketPrices {
+  [key: string]: number;
+}
+
 const TicketsPage: React.FC<TicketsPageProps> = ({ event, onCartUpdate }) => {
   const [selectedTickets, setSelectedTickets] = useState<
     { type: string; amount: number }[]
@@ -14,7 +19,9 @@ const TicketsPage: React.FC<TicketsPageProps> = ({ event, onCartUpdate }) => {
     { type: "Side Balcony", amount: 0 },
     { type: "Prime Balcony", amount: 0 },
   ]);
-  const prices = {
+
+  // Define the prices object using the TicketPrices interface
+  const prices: TicketPrices = {
     "Prime Rear Orchestra": 100,
     "Side Balcony": 10,
     "Prime Balcony": 1,
@@ -32,7 +39,7 @@ const TicketsPage: React.FC<TicketsPageProps> = ({ event, onCartUpdate }) => {
       0
     );
     const totalPrice = selectedTickets.reduce(
-      (total, ticket) => total + ticket.amount * prices[ticket.type],
+      (total, ticket) => total + ticket.amount * (prices[ticket.type] || 0), // Handle missing price cases
       0
     );
     onCartUpdate(totalTickets, totalPrice);
@@ -50,7 +57,8 @@ const TicketsPage: React.FC<TicketsPageProps> = ({ event, onCartUpdate }) => {
         {selectedTickets.map((ticket, index) => (
           <div key={ticket.type}>
             <label>
-              {ticket.type} - ${prices[ticket.type]}
+              {ticket.type} - ${prices[ticket.type] || 0}{" "}
+              {/* Handle missing price cases */}
             </label>
             <select
               value={ticket.amount}
