@@ -1,35 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import MainPage from "./MainPage";
+import TicketsPage from "./TicketsPage";
+import CartPage from "./CartPage";
+import "./styles.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
+  const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
+  const [cart, setCart] = useState<{ tickets: number; totalPrice: number }>({
+    tickets: 0,
+    totalPrice: 0,
+  });
+
+  const handleEventSelect = (event: string) => {
+    setSelectedEvent(event);
+  };
+
+  const handleCartUpdate = (tickets: number, price: number) => {
+    setCart({ tickets, totalPrice: price });
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Router>
+      <div className="app-container">
+        <Switch>
+          <Route exact path="/">
+            <MainPage onEventSelect={handleEventSelect} />
+          </Route>
+          <Route path="/tickets">
+            <TicketsPage
+              event={selectedEvent}
+              onCartUpdate={handleCartUpdate}
+            />
+          </Route>
+          <Route path="/cart">
+            <CartPage cart={cart} />
+          </Route>
+        </Switch>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    </Router>
+  );
+};
 
-export default App
+export default App;
