@@ -1,44 +1,40 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
-import MainPage from "./MainPage";
-import TicketsPage from "./TicketsPage";
-import CartPage from "./CartPage";
-import "./styles.css";
+import Banner from "./components/Banner";
+import EventList from "./components/EventList";
+import TicketsPage from "./components/TicketsPage";
+import CartPage from "./components/CartPage";
 
 const App: React.FC = () => {
-  const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
-  const [cart, setCart] = useState<{ tickets: number; totalPrice: number }>({
-    tickets: 0,
-    totalPrice: 0,
-  });
+  const [page, setPage] = useState<"main" | "tickets" | "cart">("main");
+  const [selectedEvent, setSelectedEvent] = useState<string>("");
+  const [cart, setCart] = useState({ tickets: 0, totalPrice: 0 });
 
-  const handleEventSelect = (event: string) => {
+  const handleEventClick = (event: string) => {
     setSelectedEvent(event);
+    setPage("tickets");
   };
 
-  const handleCartUpdate = (tickets: number, price: number) => {
-    setCart({ tickets, totalPrice: price });
+  const handleCartUpdate = (tickets: number, totalPrice: number) => {
+    setCart({ tickets, totalPrice });
+    setPage("cart");
   };
 
   return (
-    <Router>
-      <div className="app-container">
-        <Switch>
-          <Route exact path="/">
-            <MainPage onEventSelect={handleEventSelect} />
-          </Route>
-          <Route path="/tickets">
-            <TicketsPage
-              event={selectedEvent}
-              onCartUpdate={handleCartUpdate}
-            />
-          </Route>
-          <Route path="/cart">
-            <CartPage cart={cart} />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+    <div>
+      {page === "main" && (
+        <>
+          <Banner />
+          <EventList onEventClick={handleEventClick} />
+        </>
+      )}
+      {page === "tickets" && (
+        <TicketsPage
+          selectedEvent={selectedEvent}
+          onCartUpdate={handleCartUpdate}
+        />
+      )}
+      {page === "cart" && <CartPage cart={cart} />}
+    </div>
   );
 };
 
