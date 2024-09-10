@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import eventsData from "../assets/mockevents.json";
 import Header from "./Header";
 import Footer from "./Footer";
 
