@@ -54,7 +54,7 @@ button:hover {
   background-color: #0056b3;
 }
 
-.tickets-page, .cart-page {
+.cart-page {
   text-align: center;
   padding: 20px;
 }
@@ -84,4 +84,33 @@ select {
 
 button {
   margin-top: 20px;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.tickets-page {
+  flex-grow: 1;
+  text-align: center;
+  padding: 20px;
+}
+
+.header {
+  background-color: #f1f1f1;
+  padding: 10px;
+  text-align: center;
+}
+
+.footer {
+  background-color: #f1f1f1;
+  padding: 10px;
+  text-align: center;
 }

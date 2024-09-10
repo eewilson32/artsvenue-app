@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import eventsData from "../assets/mockevents.json";
+import Header from "./Header";
+import Footer from "./Footer";
 
 type TicketsPageProps = {
   selectedEvent: string;
@@ -10,7 +13,7 @@ const TicketsPage: React.FC<TicketsPageProps> = ({
   onCartUpdate,
 }) => {
   const [tickets, setTickets] = useState([0, 0, 0]);
-  const prices = [1, 10, 100];
+  const prices = [200, 100, 50, 0];
 
   const handleSelect = (index: number, value: number) => {
     const updatedTickets = [...tickets];
@@ -28,28 +31,32 @@ const TicketsPage: React.FC<TicketsPageProps> = ({
   };
 
   return (
-    <div className="tickets-page">
-      <h2>{selectedEvent}</h2>
-      <div className="seat-options">
-        {["Prime Rear Orchestra", "Side Balcony", "Prime Balcony"].map(
-          (option, index) => (
-            <div key={index} className="option">
-              <span>{option}</span>
-              <span>{`$${prices[index]}`}</span>
-              <select
-                onChange={(e) => handleSelect(index, Number(e.target.value))}
-              >
-                {[...Array(11).keys()].map((i) => (
-                  <option key={i} value={i}>
-                    {i}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )
-        )}
+    <div className="wrapper">
+      <div className="tickets-page">
+        <Header />
+        <h2>{selectedEvent}</h2>
+        <div className="seat-options">
+          {["Box & Chorister", "Orchestra", "1st Tier", "2nd Tier"].map(
+            (option, index) => (
+              <div key={index} className="option">
+                <span>{option} </span>
+                <span>{`$${prices[index]}`}</span>
+                <select
+                  onChange={(e) => handleSelect(index, Number(e.target.value))}
+                >
+                  {[...Array(11).keys()].map((i) => (
+                    <option key={i} value={i}>
+                      {i}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )
+          )}
+        </div>
+        <button onClick={handleAddToCart}>Add To Cart</button>
       </div>
-      <button onClick={handleAddToCart}>Add To Cart</button>
+      <Footer />
     </div>
   );
 };
